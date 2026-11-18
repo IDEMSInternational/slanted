@@ -1,11 +1,7 @@
-import { BACKSLASH, EMPTY, FORWARD, Size } from './grid';
+import { Point, Size, squareAt } from '@studio/engine/geometry';
+import { BACKSLASH, EMPTY, FORWARD } from './grid';
 import { SlantedMove, SquareChange } from './moves';
 import { SlantedState } from './state';
-
-export interface Point {
-  x: number;
-  y: number;
-}
 
 /** How far (in squares) the finger must move before a swipe counts. */
 const START_DISTANCE = 0.3;
@@ -43,7 +39,7 @@ export class SlantedStroke {
 
     // The square the swipe began in, judged just ahead of the touch, so
     // starting right on a corner picks the square being entered.
-    const square = this.squareAt({ x: this.start.x + dx / 2, y: this.start.y + dy / 2 });
+    const square = squareAt(this.size, this.start.x + dx / 2, this.start.y + dy / 2);
     this.drawn = { ...square, slash: dx > 0 === dy > 0 ? BACKSLASH : FORWARD };
     if (this.thinking) this.drawn.tentative = true;
   }
@@ -55,7 +51,7 @@ export class SlantedStroke {
 
   /** The move this touch makes when released, or null if it does nothing. */
   finish(state: SlantedState): SlantedMove | null {
-    const square = this.drawn ?? this.squareAt(this.start);
+    const square = this.drawn ?? squareAt(this.size, this.start.x, this.start.y);
     const i = square.y * this.size.w + square.x;
     const solid = state.slashes[i] !== EMPTY && !state.tentative[i];
     if (this.thinking && solid) return null; // protected while thinking
@@ -64,12 +60,5 @@ export class SlantedStroke {
     if (this.farthest >= START_DISTANCE) return null; // a drag that wasn't a swipe
     if (state.slashes[i] === EMPTY) return null;
     return { kind: 'set', changes: [{ x: square.x, y: square.y, slash: EMPTY }] };
-  }
-
-  private squareAt(p: Point): Point {
-    return {
-      x: Math.min(Math.max(Math.floor(p.x), 0), this.size.w - 1),
-      y: Math.min(Math.max(Math.floor(p.y), 0), this.size.h - 1),
-    };
   }
 }

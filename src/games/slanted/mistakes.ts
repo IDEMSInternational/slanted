@@ -1,5 +1,6 @@
 import { Dsf } from '@studio/engine/algorithms/dsf';
-import { EMPTY, NO_CLUE, Size, pointDegree, slashEnds } from './grid';
+import { Size } from '@studio/engine/geometry';
+import { EMPTY, NO_CLUE, pointDegree, slashEnds } from './grid';
 
 /** What "Show mistakes" marks on a Slanted board. */
 export interface SlantedMistakes {

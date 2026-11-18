@@ -9,9 +9,10 @@ import {
   viewChild,
 } from '@angular/core';
 import { placeLabel } from '@studio/container/board-label';
+import { BoardPointer } from '@studio/container/board-pointer';
 import { EMPTY, NO_CLUE } from '../grid';
 import { SlantedHint } from '../hint';
-import { Point, SlantedStroke } from '../input';
+import { SlantedStroke } from '../input';
 import { SlantedMove, SquareChange } from '../moves';
 import { SlantedState } from '../state';
 import { findMistakes } from '../mistakes';
@@ -47,7 +48,8 @@ export class SlantedBoard {
   readonly move = output<SlantedMove>();
 
   private readonly svg = viewChild.required<ElementRef<SVGSVGElement>>('svg');
-  private stroke: SlantedStroke | null = null;
+  /** The finger on the board. */
+  private readonly pointer = new BoardPointer<SlantedStroke>(() => this.svg().nativeElement);
   /** Slashes being drawn by the current swipe. */
   protected readonly pending = signal<readonly SquareChange[]>([]);
 
@@ -139,36 +141,23 @@ export class SlantedBoard {
   });
 
   protected onPointerDown(event: PointerEvent): void {
-    if (event.button !== 0) return;
-    event.preventDefault();
-    this.svg().nativeElement.setPointerCapture(event.pointerId);
-    this.stroke = new SlantedStroke(this.state(), this.boardPoint(event), this.thinking());
+    this.pointer.down(event, (at) => new SlantedStroke(this.state(), at, this.thinking()));
   }
 
   protected onPointerMove(event: PointerEvent): void {
-    if (!this.stroke) return;
-    this.stroke.moveTo(this.boardPoint(event));
-    this.pending.set(this.stroke.changes);
+    const stroke = this.pointer.move(event);
+    if (stroke) this.pending.set(stroke.changes);
   }
 
   protected onPointerUp(event: PointerEvent): void {
-    if (!this.stroke) return;
-    this.stroke.moveTo(this.boardPoint(event));
-    const move = this.stroke.finish(this.state());
+    const move = this.pointer.up(event)?.finish(this.state());
     this.cancelStroke();
     if (move) this.move.emit(move);
   }
 
   protected cancelStroke(): void {
-    this.stroke = null;
+    this.pointer.cancel();
     this.pending.set([]);
-  }
-
-  /** Converts a pointer position to board coordinates, in squares. */
-  private boardPoint(event: PointerEvent): Point {
-    const matrix = this.svg().nativeElement.getScreenCTM()?.inverse();
-    const p = new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix);
-    return { x: p.x, y: p.y };
   }
 }
 

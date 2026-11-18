@@ -1,7 +1,8 @@
 import { Dsf } from '@studio/engine/algorithms/dsf';
 import { RandomState } from '@studio/engine/random/random-state';
 import { shuffle } from '@studio/engine/random/shuffle';
-import { BACKSLASH, FORWARD, Size } from '../grid';
+import { Size } from '@studio/engine/geometry';
+import { BACKSLASH, FORWARD } from '../grid';
 import { fillSquare } from '../solver/workspace';
 
 /**

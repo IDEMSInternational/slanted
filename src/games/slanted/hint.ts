@@ -1,4 +1,4 @@
-import { Point } from './input';
+import { Point } from '@studio/engine/geometry';
 
 /**
  * Tutorial guidance drawn on the Slanted board: a swipe through a path of

@@ -8,7 +8,9 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { BoardFinger } from '@studio/container/board-finger';
 import { placeLabel } from '@studio/container/board-label';
+import { BoardLabelView } from '@studio/container/board-label-view';
 import { BoardPointer } from '@studio/container/board-pointer';
 import { EMPTY, NO_CLUE } from '../grid';
 import { SlantedHint } from '../hint';
@@ -33,6 +35,7 @@ const MARGIN = 0.45;
 /** Board for Slanted, drawn as SVG in square units. Emits moves; never changes state itself. */
 @Component({
   selector: 'slanted-board',
+  imports: [BoardFinger, BoardLabelView],
   templateUrl: './slanted-board.html',
   styleUrl: './slanted-board.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,14 +120,13 @@ export class SlantedBoard {
     if (!hint) return null;
     if (hint.gesture === 'tap') {
       const s = hint.square;
-      return { squares: [s], centre: { x: s.x + 0.5, y: s.y + 0.5 }, path: null };
+      return { squares: [s], tap: { x: s.x + 0.5, y: s.y + 0.5 }, along: null };
     }
     const squares = hint.path.slice(1).map((p, i) => ({
       x: Math.min(p.x, hint.path[i].x),
       y: Math.min(p.y, hint.path[i].y),
     }));
-    const path = 'M ' + hint.path.map((p) => `${p.x} ${p.y}`).join(' L ');
-    return { squares, centre: null, path };
+    return { squares, tap: null, along: hint.path };
   });
 
   /** A tutorial note next to the hinted squares, e.g. "Closes a loop". */

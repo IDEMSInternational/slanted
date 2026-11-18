@@ -1,5 +1,6 @@
 import { Dsf } from '@studio/engine/algorithms/dsf';
-import { EMPTY, Size, slashEnds } from '../grid';
+import { Size } from '@studio/engine/geometry';
+import { EMPTY, slashEnds } from '../grid';
 
 /**
  * Colours the lines on a Slanted board by connected group: lines that touch

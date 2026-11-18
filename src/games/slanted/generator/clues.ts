@@ -1,6 +1,7 @@
 import { RandomState } from '@studio/engine/random/random-state';
 import { shuffle } from '@studio/engine/random/shuffle';
-import { NO_CLUE, Size, pointDegree } from '../grid';
+import { Size } from '@studio/engine/geometry';
+import { NO_CLUE, pointDegree } from '../grid';
 import { EASY } from '../params';
 import { solveSlanted } from '../solver/solver';
 

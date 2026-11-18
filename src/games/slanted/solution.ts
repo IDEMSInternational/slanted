@@ -1,4 +1,5 @@
-import { BACKSLASH, FORWARD, Size } from './grid';
+import { Size } from '@studio/engine/geometry';
+import { BACKSLASH, FORWARD } from './grid';
 
 /**
  * Text form of a solution, compatible with the original: one character per

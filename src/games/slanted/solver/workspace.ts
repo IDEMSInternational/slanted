@@ -1,5 +1,6 @@
 import { Dsf } from '@studio/engine/algorithms/dsf';
-import { BACKSLASH, NO_CLUE, Size } from '../grid';
+import { Size } from '@studio/engine/geometry';
+import { BACKSLASH, NO_CLUE } from '../grid';
 
 /**
  * Possible "v" shapes between neighbouring squares, as bits of `vShapes`:

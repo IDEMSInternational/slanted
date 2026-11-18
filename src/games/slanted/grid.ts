@@ -6,7 +6,11 @@
  * - A square holds BACKSLASH (\, joining its top-left and bottom-right
  *   points), FORWARD (/, joining top-right and bottom-left) or EMPTY.
  * - A clue is the number of lines touching its point, or NO_CLUE.
+ *
+ * Board sizes (Size) are shared by every game: @studio/engine/geometry.
  */
+
+import { Size } from '@studio/engine/geometry';
 
 export const BACKSLASH = -1;
 export const FORWARD = 1;
@@ -14,11 +18,6 @@ export const EMPTY = 0;
 export const NO_CLUE = -1;
 
 export type Slash = typeof BACKSLASH | typeof FORWARD | typeof EMPTY;
-
-export interface Size {
-  w: number;
-  h: number;
-}
 
 /** The two grid points a slash joins in square (x, y), as point indices. */
 export function slashEnds(size: Size, x: number, y: number, slash: Slash): [number, number] {

@@ -1,4 +1,5 @@
-import { NO_CLUE, Size } from './grid';
+import { Size } from '@studio/engine/geometry';
+import { NO_CLUE } from './grid';
 
 /**
  * Text form of a puzzle, compatible with the original collection. Clue

@@ -1,5 +1,6 @@
+import { Size } from '@studio/engine/geometry';
 import { EASY } from '../params';
-import { BACKSLASH, EMPTY, FORWARD, NO_CLUE, Size } from '../grid';
+import { BACKSLASH, EMPTY, FORWARD, NO_CLUE } from '../grid';
 import { CARET_RIGHT, GT_BELOW, LT_BELOW, SolverWorkspace, V_RIGHT, fillSquare } from './workspace';
 
 export type SolverResult = 'solved' | 'ambiguous' | 'impossible';
